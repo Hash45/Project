@@ -7,8 +7,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const bodyParser = require('body-parser'); 
-app.use(express.static('uploads')); 
-mongoose.connect("mongodb://0.0.0.0/bharatintern2", {
+app.use(express.static('uploads'));
+const mongodbURL='mongodb+srv://harshithabali45:AmmaNanna%40222@project.n5pr1td.mongodb.net/Project'
+mongoose.connect(mongodbURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-image: url("https://wallpaperaccess.com/full/5137787.png"); 
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    h1 {
+      text-align: center;
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin-top: 30px;
+    }
+
+    .card {
+      width: 45%;
+      padding: 20px;
+      margin: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  h2{
+    color:antiquewhite;
+  }
+    .chat-card:hover {
+      background-color: lightcoral;
+    }
+
+    .task-card:hover {
+      background-color: rgb(3, 188, 249);
+    }
+
+    .chat-card {
+      background-color: coral;
+      color: white;
+    }
+
+    .task-card {
+      background-color: dodgerblue;
+      color: white;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-description {
+      font-size: 16px;
+    }
+
+    .logout-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px;
+      background-color:#4caf50;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      color: white;
+    }
+
+    .logout-button:hover {
+      background-color:#2e7030;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Project Management Tool</h1>
+  <form action="/logout" method="POST">
+    <button id="logoutButton" class="logout-button" type="submit">Logout</button>
+  </form>
+  <h2>Welcome <%= username %></h2>
+  <div class="card-container">
+    <a href="/chat" class="card chat-card">
+      <h3 class="card-title">Chat</h3>
+      <p class="card-description">Here we can chat with different users having accounts.</p>
+    </a>
+    <a href="/task" class="card task-card">
+      <h3 class="card-title">Task Assignment</h3>
+      <p class="card-description">Here one can assign tasks to an individual user, and the user can accept or decline them.</p>
+    </a>
+  </div>  
+</body>
+</html>

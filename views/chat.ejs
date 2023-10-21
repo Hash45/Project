@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://media.istockphoto.com/id/1156309024/vector/green-speech-and-thought-bubbles-with-quote-marks.jpg?s=612x612&w=0&k=20&c=LVRJRXHYKC2C30I4jKaLbXJZTKqKBZLSgEiot9An190=');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size:cover;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 100px;
+      height: 88vh;
+      width: 80%;
+      margin-top: 70px;
+    }
+    .search-input {
+      margin-bottom: 10px;
+      padding: 15px;
+      border: none;
+      width: 75%;
+      height: 5%;
+      border-radius: 5px;
+    }
+
+    .user-list {
+      flex: 1;
+      background-color: #e8f5e9;
+      padding: 20px;
+      overflow-y: auto;
+      width: 30%;
+      height: 80%;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .user-list::before,
+    .user-list::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background-color: #e8f5e9;
+      z-index: -1;
+    }
+
+    .user-list::before {
+      left: -20px;
+    }
+
+    .user-list::after {
+      right: -20px;
+    }
+
+    .avatar {
+      width: 45px;
+      height: 45px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+    }
+
+    .user-list-item {
+      display: flex;
+      padding-bottom: 15px;
+      cursor: pointer;
+    }
+
+    .user-list-item.active {
+      background-color: #dcedc8;
+    }
+
+    .user-list-item span {
+      font-weight: bold;
+      padding: 15px;
+    }
+
+    .user-list-item.active span {
+      border-bottom: 2px solid #4caf50;
+    }
+
+    .chat-window {
+      flex: 2;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      height:30px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .chat-message {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .chat-message .message-content {
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .chat-message.sent {
+      justify-content: flex-end;
+    }
+
+    .chat-message.received {
+      justify-content: flex-start;
+    }
+
+    .chat-message.sent .message-content {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+    }
+
+    .chat-message.received .message-content {
+      background-color: #e6e6e6;
+      align-self: flex-start;
+    }
+
+    .input-area {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .input-area input[type="text"] {
+      flex: 1;
+      padding: 20px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .input-area button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4caf50;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      color: white;
+    }
+    .back-button:hover {
+      background-color: #2e7030;
+    } 
+
+    .logout-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      color: white;
+    }
+
+    .logout-button:hover {
+      background-color: #2e7030;
+    }
+
+    .chat-window {
+      height: 80%;
+      width: 10%; 
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    @media screen and (max-width: 768px) {
+      .avatar {
+        background-position: center;
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="user-list">
+      <h2 style="background-color: #4caf50; color: white; padding: 10px; margin-top: 0; border-top-left-radius: 10px; border-top-right-radius: 10px;">User List</h2>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search a User">
+      <ul id="userList"></ul>
+    </div>
+    <div class="chat-window">
+      <div class="chat-header">
+        <div class="avatar"></div>
+        <h2 class="selected-user"></h2>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="input-area">
+        <input type="text" id="messageInput" placeholder="Type a message">
+        <button id="sendButton">Send</button>
+      </div>
+    </div>
+  </div>
+  <button id="backButton" class="back-button" onclick="history.back()">Back</button>
+  <button id="logoutButton" class="logout-button">Logout</button>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var selectedUser = null;
+      var loggedInUser = '<%= username %>';
+      var chatMessagesDiv = $('#chatMessages');
+      
+      function startChatting() {
+        if (selectedUser) {
+          $.ajax({
+            url: '/chat-long-polling/' + selectedUser,
+            method: 'GET',
+            success: function (response) {
+              var messages = response.messages;
+              displayChatMessages(messages);
+              startChatting();
+            },
+            error: function (error) {
+              console.log(error);
+            }
+          });
+        }
+      }
+
+      function fetchUsers() {
+        $.ajax({
+          url: '/users',
+          method: 'GET',
+          success: function (response) {
+            var users = response.users;
+            populateUserList(users);
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      }
+
+      function populateUserList(users) {
+        var userList = $('#userList');
+        userList.empty();
+
+        for (var i = 0; i < users.length; i++) {
+          var user = users[i];
+          var listItem = $('<li></li>').addClass('user-list-item');
+          var avatarDiv = $('<div></div>')
+            .addClass('avatar')
+            .css('background-image', 'url(' + user.avatar + ')');
+
+          var usernameSpan = $('<span></span>').text(user.username);
+
+          listItem.append(avatarDiv);
+          listItem.append(usernameSpan);
+          if (user.username === loggedInUser) {
+            listItem.addClass('active');
+            selectedUser = loggedInUser;
+            $('.selected-user').text(loggedInUser);
+            startChatting();
+          }
+
+          userList.append(listItem);
+        }
+      }
+
+      function fetchChatMessages(selectedUser) {
+  $.ajax({
+    url: '/chat/' + selectedUser,
+    method: 'GET',
+    success: function (response) {
+      var messages = response.messages;
+      displayChatMessages(messages);
+      setTimeout(scrollToBottom, 100);  
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+}
+      function displayChatMessages(messages) {
+        chatMessagesDiv.empty();
+
+        for (var i = messages.length - 1; i >= 0; i--) {
+          var message = messages[i]; 
+          if (message.sender.username === selectedUser || message.receiver.username === selectedUser) {
+            var chatMessageDiv = $('<div></div>').addClass('chat-message');
+            var messageContentDiv = $('<div></div>').addClass('message-content').text(message.content);
+
+            chatMessageDiv.append(messageContentDiv);
+
+            if (message.sender.username === loggedInUser) {
+              chatMessageDiv.addClass('sent');
+            } else {
+              chatMessageDiv.addClass('received');
+            }
+
+            chatMessagesDiv.prepend(chatMessageDiv);
+          }
+        }
+      } 
+      function logout() {
+        $.post('/logout', function() {
+          window.location.href = '/';
+        });
+      } 
+      $('#logoutButton').on('click', logout); 
+      $('#searchInput').on('keyup', function () {
+        var searchTerm = $(this).val().toLowerCase();
+        var userListItems = $('.user-list-item');
+
+        userListItems.each(function () {
+          var listItem = $(this);
+          var username = listItem.find('span').text().toLowerCase(); 
+          if (username.startsWith(searchTerm)) {
+            listItem.show();
+          } else {
+            listItem.hide();
+          }
+        });
+      });
+
+      $(document).on('click', '.user-list-item', function () {
+        $('.user-list-item').removeClass('active');
+        $(this).addClass('active');
+        selectedUser = $(this).text();
+        $('.selected-user').text(selectedUser);
+        fetchChatMessages(selectedUser);
+        startChatting();
+      }); 
+      $('#sendButton').on('click', function () {
+        var messageInput = $('#messageInput');
+        var message = messageInput.val().trim();
+        if (message) {
+          sendMessage(selectedUser, message);
+        }
+      }); 
+      $('#messageInput').on('keypress', function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          var messageInput = $('#messageInput');
+          var message = messageInput.val().trim();
+          if (message) {
+            sendMessage(selectedUser, message);
+          }
+        }
+      });
+
+      function sendMessage(selectedUser, message) {
+        $.ajax({
+          url: '/send-message',
+          method: 'POST',
+          data: { sender: loggedInUser, receiver: selectedUser, content: message },
+          success: function () {
+            $('#messageInput').val('');
+            fetchChatMessages(selectedUser);
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      }
+
+      function scrollToBottom() {
+        chatMessagesDiv.scrollTop(chatMessagesDiv[0].scrollHeight);
+      } 
+       
+      fetchUsers();
+    });
+  </script>
+</body>
+</html>
